@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "install": "^0.13.0"
+  },
+  "name": "projeto14-mywallet-back",
+  "type": "module",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nilteras/projeto14-mywallet-back.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nilteras/projeto14-mywallet-back/issues"
+  },
+  "homepage": "https://github.com/nilteras/projeto14-mywallet-back#readme"
+}
