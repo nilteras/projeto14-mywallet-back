@@ -1,6 +1,6 @@
 import Joi from "joi";
 
 export const schemaNovaTransacao = Joi.object({
-    value: Joi.number().positive().required(),
-    description: Joi.string().required()
+    valor: Joi.number().positive().required(),
+    descricao: Joi.string().required()
 });

@@ -1,3 +1,5 @@
+import { db } from './../database/database.connection.js'
+
 export async function authValidate(req, res, next) {
     const { authorization } = req.headers
     const token = authorization?.replace("Bearer ", "")
@@ -6,7 +8,7 @@ export async function authValidate(req, res, next) {
 
     try {
         const sessao = await db.collection("sessao").findOne({ token })
-        if (!sessao) return res.sendStatus(401)
+        if (!sessao) return res.status(401).send("Usuário não esta logado")
       
         next()
 
