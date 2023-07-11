@@ -34,7 +34,7 @@ export async function signin(req, res) {
         const token = uuid()
         await db.collection("sessao").insertOne({ token, idUsuario: usuario._id })
 
-        res.sendStatus(200)
+        res.status(200).send({usuario,token})
     } catch (err) {
         res.sendStatus(500)
     }

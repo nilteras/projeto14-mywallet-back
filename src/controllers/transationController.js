@@ -1,5 +1,6 @@
 import { db } from '../database/database.connection.js'
 import dayjs from 'dayjs'
+import { v4 as uuid } from 'uuid'
 
 const date = dayjs().format("DD/MM")
 
@@ -22,7 +23,7 @@ export async function novaTransacao(req, res) {
             { _id: usuarioLogado.idUsuario },
             {
                 $set: {
-                    transacoes: [...usuarioInfo.transacoes, { ...req.body, tipo: req.params.tipo, data: date }],
+                    transacoes: [...usuarioInfo.transacoes, { ...req.body, tipo: req.params.tipo, data: date, id: uuid()  }],
                     saldo: saldoTotal
                 }
             })
@@ -37,13 +38,16 @@ export async function novaTransacao(req, res) {
 
 export async function listarExtrato(req, res) {
 
-    const token = req.headers.authorization;
+    const { authorization } = req.headers
+    const token = authorization?.replace("Bearer ", "")
+   
+    console.log(token)
 
     try {
         const usuarioLogado = await db.collection('sessao').findOne({ token })
-
+        
         const usuarioInfo = await db.collection('usuarios').findOne({ _id: usuarioLogado.idUsuario })
-        console.log(usuarioInfo)
+       
 
         return res.status(200).send(
             {
