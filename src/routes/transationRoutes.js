@@ -6,7 +6,7 @@ import { authValidate } from "../middlewares/authValidate.js";
 
 const transationRouter = Router();
 
-transationRouter.post("/nova-transacao/:tipo", validateSchema(schemaNovaTransacao), authValidate, novaTransacao);
+transationRouter.post("/nova-transacao/:tipo", authValidate, validateSchema(schemaNovaTransacao), novaTransacao);
 transationRouter.get("/home",authValidate, listarExtrato);
 
 export default transationRouter;

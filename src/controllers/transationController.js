@@ -4,17 +4,18 @@ import { v4 as uuid } from 'uuid'
 
 const date = dayjs().format("DD/MM")
 
-export async function novaTransacao(req, res) {
+export async function novaTransacao(req, res, token) {
 
     const { valor, descricao } = req.body
 
-    const token = req.headers.authorization;
-
     try {
+
         const usuarioLogado = await db.collection('sessao').findOne({ token })
- 
+
+        if (!usuarioLogado) return res.status(401).send("Não autorizado")
+
         const usuarioInfo = await db.collection('usuarios').findOne({ _id: usuarioLogado.idUsuario })
-   
+
         const saldoTotal = req.params.tipo === 'entrada' ?
             Number(usuarioInfo.saldo) + Number(valor) :
             Number(usuarioInfo.saldo) - Number(valor)
@@ -23,7 +24,7 @@ export async function novaTransacao(req, res) {
             { _id: usuarioLogado.idUsuario },
             {
                 $set: {
-                    transacoes: [...usuarioInfo.transacoes, { ...req.body, tipo: req.params.tipo, data: date, id: uuid()  }],
+                    transacoes: [...usuarioInfo.transacoes, { ...req.body, tipo: req.params.tipo, data: date, id: uuid() }],
                     saldo: saldoTotal
                 }
             })
@@ -36,22 +37,17 @@ export async function novaTransacao(req, res) {
 
 }
 
-export async function listarExtrato(req, res) {
-
-    const { authorization } = req.headers
-    const token = authorization?.replace("Bearer ", "")
-   
-    console.log(token)
+export async function listarExtrato(req, res, token) {
 
     try {
         const usuarioLogado = await db.collection('sessao').findOne({ token })
-        
+
         const usuarioInfo = await db.collection('usuarios').findOne({ _id: usuarioLogado.idUsuario })
-       
+
 
         return res.status(200).send(
             {
-                transacoes: usuarioInfo.transacoes, 
+                transacoes: usuarioInfo.transacoes,
                 saldo: usuarioInfo.saldo,
                 nome: usuarioInfo.nome
             })
