@@ -38,13 +38,12 @@ export async function novaTransacao(req, res, token) {
 }
 
 export async function listarExtrato(req, res, token) {
-
+    console.log(token)
     try {
         const usuarioLogado = await db.collection('sessao').findOne({ token })
-
+      
         const usuarioInfo = await db.collection('usuarios').findOne({ _id: usuarioLogado.idUsuario })
-
-
+        
         return res.status(200).send(
             {
                 transacoes: usuarioInfo.transacoes,
@@ -52,6 +51,20 @@ export async function listarExtrato(req, res, token) {
                 nome: usuarioInfo.nome
             })
 
+
+    } catch (err) {
+        console.log(err.message)
+        return res.status(500).send(err.message)
+    }
+}
+
+export async function efetuarLogout(req, res) {
+
+    try {
+
+        await db.collection('sessao').deleteMany({})
+        
+        return res.sendStatus(200)
 
     } catch (err) {
         console.log(err.message)
